@@ -23,7 +23,7 @@ index_to_remove
 count_nan_in_df = df.isnull().sum()
 print (count_nan_in_df)
 
-# want to drop the rows which have NaN values apart from clinical info which may not always be relevant
+# want to drop the rows which have NaN values apart from clinical info
 # will make new data drame without clinical info - keeping PTID so can refer in future
 # %%
 new_df = df.drop(axis=1, labels="clinicalInfo")
@@ -39,10 +39,7 @@ year_of_birth = cleaned_df["DOB"].str[-4:].astype(int)
 # %%
 type(year_of_birth)
 # %%
-for item in year_of_birth:
-    age = []
-    individual_age = 2021 - item 
-    age.append(individual_age)
+year_of_birth.mean()
 
 # %%
 cleaned_df.head()
