@@ -36,23 +36,28 @@ def cleaned_df_function(csv_input):
     "patientID", "DOB", "labNumber", "clinicalInfo", "requestDate", "OBXexamCodeID", "hospitalWardLocation", "resultValue", "clinicianCode"
     ]
 
-    #df into new df without clinicalInfo
+    # df into new df without clinicalInfo
     # remove top line 
     headless_df = df.drop(df.index[[0]], axis = 0)
+    # remove clinical info
     new_df = headless_df.drop(axis=1, labels="clinicalInfo")
+
     global cleaned_df
+    # drop NaN
     cleaned_df = new_df.dropna()
-    return cleaned_df
+    # now only look for ALT AST results
+    AST_ALT_df = cleaned_df.loc[(cleaned_df['OBXexamCodeID']=='AST') | (cleaned_df['OBXexamCodeID'] == 'ALT2')]
+    # remove lab, ward location and clinician code columns
+    clean_AST_ALT_df = AST_ALT_df.drop(['labNumber','hospitalWardLocation','clinicianCode'],axis=1)
 
+    return clean_AST_ALT_df
 
-input_df = 'data1Table1.txt'
-cleaned_df_function(input_df)
+cleaned_df_function('data1Table1.txt')
+
 # %%
-AST_ALT_df = cleaned_df.loc[(cleaned_df['OBXexamCodeID']=='AST') | (cleaned_df['OBXexamCodeID'] == 'ALT2')]
-AST_ALT_df
+
 # %%
-clean_AST_ALT_df = AST_ALT_df.drop(['labNumber','hospitalWardLocation','clinicianCode'],axis=1)
-clean_AST_ALT_df
+
 # df with only AST and ALT results but is in long format
 # %%
 widened_AST_ALT_df = clean_AST_ALT_df.pivot(columns='OBXexamCodeID', values='resultValue', index='patientID')
