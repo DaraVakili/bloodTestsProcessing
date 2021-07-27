@@ -53,9 +53,11 @@ AST_ALT_df
 # %%
 clean_AST_ALT_df = AST_ALT_df.drop(['labNumber','hospitalWardLocation','clinicianCode'],axis=1)
 clean_AST_ALT_df
+# df with only AST and ALT results but is in long format
 # %%
 widened_AST_ALT_df = clean_AST_ALT_df.pivot(columns='OBXexamCodeID', values='resultValue', index='patientID')
 widened_AST_ALT_df
+# widened format doesn't work due to multiple results/patient
 # %%
 clean_AST_ALT_df.sort_values(by='patientID')
 # %%
