@@ -1,6 +1,7 @@
 #%%
 import pandas as pd
 import plotly as py
+from datetime import datetime, date
 
 # %%
 # year_of_birth = cleaned_df["DOB"].str[-4:].astype(int)
@@ -68,4 +69,13 @@ clean_AST_ALT_df.sort_values(by='patientID')
 # %%
 clean_AST_ALT_df.describe()
 # there are not the same numbers of AST/ALT results - ?solution
+# %%
+def age(born):
+    born = datetime.strptime(born, "%d/%m/%Y").date()
+    today = date.today()
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+  
+clean_AST_ALT_df['Age'] = clean_AST_ALT_df['DOB'].apply(age)
+  
+display(clean_AST_ALT_df)
 # %%
