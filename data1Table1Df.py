@@ -51,6 +51,8 @@ def cleaned_df_function(csv_input):
     # remove lab, ward location and clinician code columns
     clean_AST_ALT_df = AST_ALT_df.drop(['labNumber','hospitalWardLocation','clinicianCode'],axis=1)
 
+    clean_AST_ALT_df["requestDate"] = clean_AST_ALT_df["requestDate"].str[0:10]
+
     return clean_AST_ALT_df
 
 cleaned_df_function('data1Table1.txt')
@@ -70,12 +72,13 @@ clean_AST_ALT_df.sort_values(by='patientID')
 clean_AST_ALT_df.describe()
 # there are not the same numbers of AST/ALT results - ?solution
 # %%
-def age(born):
+def age_at_test(born,req_date):
     born = datetime.strptime(born, "%d/%m/%Y").date()
-    today = date.today()
-    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    req_date = datetime.strptime(req_date, "%d/%m/%Y").date()
+    return req_date.year - born.year - ((req_date.month, req_date.day) < (born.month, born.day))
   
-clean_AST_ALT_df['Age'] = clean_AST_ALT_df['DOB'].apply(age)
+clean_AST_ALT_df['Age'] = clean_AST_ALT_df.apply(age_at_test(clean_AST_ALT_df["DOB"],clean_AST_ALT_df["requestDate"]))
   
-display(clean_AST_ALT_df)
+clean_AST_ALT_df
+# doesn't work just yet, looking into this
 # %%
